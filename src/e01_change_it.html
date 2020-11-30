@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <p> {{ foo }} </p>
+            <button v-on:click="foo = 'baz'">Change it</button>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: { foo: 'foo' }
+            })
+        </script>
+    </body>
+</html>

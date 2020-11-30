@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <todo-item></todo-item>
+            <todo-item></todo-item>
+        </div>
+        <script>
+            Vue.component('todo-item', {
+                template: '<li>This is a todo</li>'
+            })
+            var app = new Vue({
+                el: '#app'
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <p> {{ a }} </p>
+            <button v-on:click="a = 'baz'">Change it</button>
+        </div>
+        <script>
+            var data = {a: 1}
+            var app = new Vue({
+                el: '#app',
+                data: data
+            })
+
+            console.log('app.$data === data: ' + (app.$data === data)) // => true
+            console.log('app.$el === document.getElementById(app): ' + (app.$el === document.getElementById("app"))) // => true
+
+            app.$watch('a', function(newValue, oldValue){
+                console.log('app.a changed: ' + data.a);
+            })
+        </script>
+    </body>
+</html>
