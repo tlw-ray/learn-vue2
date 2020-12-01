@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div v-bind:style="[baseStyles, overrideStyles]">
+                {{ message }}
+            </div>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!',
+                    baseStyles:{
+                        color: 'red',
+                        fontSize: '13px'
+                    },
+                    overrideStyles: {
+                        fontSize: '100px'
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

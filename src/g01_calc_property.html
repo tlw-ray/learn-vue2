@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <p>Original message: "{{ message }}"</p>
+            <!-- 下面这种写法是无法执行的, 必须使用computed property -->
+            <!-- <p>Computed reversed message by expression: "{{ message.split('').reverse().json('')}}"</p> -->
+            <p>Computed property: "{{ reversedMessageComputed }}"</p>
+            <p>Reversed message: "{{ reversedMessageMethod() }}"</p>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello'
+                },
+                computed: {
+                    // 计算属性的getter
+                    reversedMessageComputed: function(){
+                        // 'this' 指向当前vue实例
+                        return this.message.split('').reverse().join('')
+                    }
+                },
+                methods: {
+                    // 方法不能和计算属性重名否则会覆盖它
+                    reversedMessageMethod: function(){
+                        return this.message.split('').reverse().join('')
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

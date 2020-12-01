@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- 静态赋值 -->
+            <blog-post title="My journey with Vue"></blog-post>
+            <hr>
+            <!-- 动态赋予一个变量的值 -->
+            <blog-post v-bind:title="post.title"></blog-post>
+            <hr>
+            <!-- 动态赋予一个复杂表达式的值 -->
+            <blog-post
+                v-bind:title="post.title + ' by ' + post.author.name"
+                ></blog-post>
+                <hr>
+            <!-- 即便 `42` 是静态的，我们仍然需要 `v-bind` 来告诉 Vue -->
+            <!-- 这是一个 JavaScript 表达式而不是一个字符串。-->
+            <blog-post v-bind:likes="42"></blog-post>
+            <hr>
+            <!-- 用一个变量进行动态赋值。-->
+            <blog-post v-bind:likes="post.likes"></blog-post>
+            <hr>
+            <!-- 这是一个 JavaScript 表达式而不是一个字符串。-->
+            <blog-post v-bind:comment-ids="[234, 266, 273]"></blog-post>
+            <hr>
+            <!-- 用一个变量进行动态赋值。-->
+            <blog-post v-bind:comment-ids="post.commentIds"></blog-post>
+            <hr>
+            <!-- 这是一个 JavaScript 表达式而不是一个字符串。-->
+            <blog-post
+                v-bind:author="{
+                name: 'Veronica',
+                company: 'Veridian Dynamics'
+                }"
+                ></blog-post>
+                <hr>
+            <!-- 用一个变量进行动态赋值。-->
+            <blog-post v-bind:author="post.author"></blog-post>
+        </div>
+        <script>
+            Vue.component('blog-post', {
+                props: {
+                    title: String,
+                    likes: Number,
+                    isPublished: Boolean,
+                    commentIds: Array,
+                    author: Object,
+                    callback: Function,
+                    contactsPromise: Promise,
+                },
+                template: `<h3> 
+                        <p>title: {{ title }}</p> 
+                        <p>likes: {{likes}} </p>
+                        <p>is published: {{ isPublished }} </p>
+                        <p>comment ids: {{ commentIds }} </p>
+                        <p>author name: {{ author ? author.name : '' }} </p>
+                        <p>author company: {{ author ? author.company : '' }} </p>
+                    </h3>`
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    post: {
+                        title: 'post-title',
+                        author: {
+                            name: 'post-author-name',
+                            company: 'xxx',
+                        },
+                        likes: 100,
+                        isPublished: false,
+                        commentIds: [1,2,3]
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <p>fullName: {{ fullName }}</p>
+            <p>fullNameComputed: {{ fullNameComputed }}</p>
+            <button @click="changeName">ChangeName</button>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    firstName: 'Foo',
+                    lastName: 'Bar',
+                    fullName: 'Foo Bar'
+                },
+                watch: {
+                    firstName: function(val){
+                        this.fullName = val + ' ' + this.lastName
+                    },
+                    lastName: function(val){
+                        this.fullName = this.firstName + ' ' + val
+                    }
+                },
+                // 使用计算属性优于写watch属性监听代码
+                computed: {
+                    fullNameComputed: function(){
+                        return this.firstName + ' ' + this.lastName
+                    }
+                },
+                methods: {
+                    changeName: function(){
+                        return this.firstName = "FFF"
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <!-- TODO 该示例未实现 https://cn.vuejs.org/v2/guide/components-props.html-->
+        <div id="app">
+            <blog-post post-title="hello!">
+                <input p1="new">
+                {{ p1 }}
+            </blog-post>
+            {{ p1 }}
+        </div>
+        <script>
+            Vue.component('blog-post', {
+                // 在 JavaScript 中是 camelCase 的
+                props: ['postTitle'],
+                template: `<div>
+                        <h3> {{ postTitle }} </h3>
+                        <slot></slot>
+                        </div>`
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    p1: ''
+                }
+            })
+        </script>
+    </body>
+</html>

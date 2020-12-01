@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- 在 HTML 中是 kebab-case 的 -->
+            <blog-post title="hello!"></blog-post>
+        </div>
+        <script>
+            Vue.component('blog-post', {
+                // 在 JavaScript 中是 camelCase 的
+                props: {
+                    title: String,
+                    likes: Number,
+                    isPublished: Boolean,
+                    commentIdks: Array,
+                    author: Object,
+                    callback: Function,
+                    contactsPromise: Promise
+                },
+                template: '<h3> {{ title }} </h3>'
+            })
+            var app = new Vue({
+                el: '#app',
+            })
+        </script>
+    </body>
+</html>

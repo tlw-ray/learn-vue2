@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <component-a></component-a>
+            <component-b></component-b>
+          </div>
+        <script>
+            // 全局注册组件
+            // 全局注册的行为必须在根 Vue 实例 (通过 new Vue) 创建之前发生
+            Vue.component('component-a', {
+                template: "<div> component-a </div>"
+            })
+            var app = new Vue({
+                el: '#app',
+                components: {
+                    'component-b': {
+                        template: "<div> component-b </div>"
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

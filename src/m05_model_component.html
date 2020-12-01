@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <custom-input v-model="searchText"></custom-input>
+            {{ searchText }}
+        </div>
+        <script>
+            // 为了让自定义组件正常工作，这个组件内的 <input> 必须：
+            // 将其 value attribute 绑定到一个名叫 value 的 prop 上
+            // 在其 input 事件被触发时，将新的值通过自定义的 input 事件抛出
+
+            Vue.component('custom-input', {
+            props: ['value'],
+            // 以下实现了 v-model
+            template: `
+                <input
+                v-bind:value="value"
+                v-on:input="$emit('input', $event.target.value)"
+                >
+            `
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    searchText: ''
+                }
+            })
+        </script>
+    </body>
+</html>

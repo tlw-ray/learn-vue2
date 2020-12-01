@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <!-- TODO 感觉用不到暂时不实现例子-->
+        <div id="app">
+            {{ message }}
+        </div>
+        <script>
+            // 定义一个混入对象
+            var myMixin = {
+                created: function () {
+                    this.hello()
+                },
+                methods: {
+                    hello: function () {
+                        console.log('hello from mixin!')
+                    }
+                }
+            }
+
+            // 定义一个使用混入对象的组件
+            var Component = Vue.extend({
+                mixins: [myMixin]
+            })
+
+            var component = new Component() // => "hello from mixin!"
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!'
+                }
+            })
+        </script>
+    </body>
+</html>

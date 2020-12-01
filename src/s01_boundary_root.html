@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <sub-component></sub-component>
+        </div>
+        <script>
+            Vue.component('sub-component', {
+                template: `
+                    <div>{{ getXxx() }}</div>
+                `, methods: {
+                    getXxx: function () {
+                        //所有的子组件都可以将这个实例作为一个全局 store 来访问或使用。
+                        //大型应用建议用Vuex来管理
+                        return this.$root.foo
+                    }
+                }
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    foo: 1
+                },
+                computed: {
+                    bar: function () {}
+                },
+                methods: {
+                    baz: function () {}
+                }
+            })
+        </script>
+    </body>
+</html>

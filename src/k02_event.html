@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- 带参 -->
+            <button v-on:click="say('hi')">Say hi</button>
+            <button v-on:click="say('what')">Say what</button>
+            <!-- 原生DOM事件 -->
+            <button v-on:click="greet">Greet</button>
+            <!-- 参数加原生DOM事件 -->
+            <button v-on:click="warn('Form cannot be submitted yet.', $event)">
+                Submit
+            </button>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                methods: {
+                    say: function (message) {
+                        alert(message + " " + event.target.tagName)
+                    },
+                    greet: function (event){
+                        if(event){
+                            alert(event.target.tagName)
+                        }
+                    },
+                    warn: function (message, event) {
+                        // 现在我们可以访问原生事件对象
+                        if (event) {
+                            event.preventDefault()
+                        }
+                        alert(message)
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

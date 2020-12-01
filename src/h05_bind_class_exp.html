@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div v-bind:class="[{redClass: isRed}, isActive ? activeClass : hiddenClass, otherClass, 'hardCodeClass']">
+                {{ message }}
+            </div>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!',
+                    errorClass: 'text-danger',
+                    isActive: false,
+                    activeClass: 'active',
+                    hiddenClass: 'hidden',
+                    isRed: true,
+                    redClass: 'redClass',
+                    otherClass: 'otherClass'
+                },
+            })
+        </script>
+    </body>
+</html>

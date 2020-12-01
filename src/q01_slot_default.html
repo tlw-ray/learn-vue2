@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- default slot -->
+            <submit-button></submit-button>
+            <!-- override slot -->
+            <submit-button>Save</submit-button>
+        </div>
+        <script>
+            Vue.component('submit-button', {
+                template: `
+                    <button type="submit">
+                        <slot>Submit</slot>
+                    </button>
+                `
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!'
+                }
+            })
+        </script>
+    </body>
+</html>

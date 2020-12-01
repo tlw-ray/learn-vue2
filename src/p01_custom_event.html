@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- TODO 触发自定义事件未实现-->
+            <my-component v-on:my-event="doSomething"></my-component>
+            <button @click="triggerMyEvent">Fire MyEvent</button>
+        </div>
+        <script>
+            Vue.component('my-component', {
+                template: `
+                    <div>
+                        custom event
+                    </div>
+                `,
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!'
+                },
+                methods: {
+                    doSomething: function () {
+                        alert('my-event')
+                    },
+                    triggerMyEvent: function () {
+                        alert('ok')
+                        this.$emit('my-event')
+                    }
+                }
+            })
+            
+        </script>
+    </body>
+</html>

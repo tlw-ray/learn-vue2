@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!--注意: html要求横杠分隔写法-->
+            <!--propA期望数值类型, 这里是字符串, 后台会报类型错误-->
+            <my-component 
+                v-bind:prop-c='propC' 
+                v-bind:prop-a='propA'>
+            </my-component>
+        </div>
+        <script>
+            Vue.component('my-component', {
+            props: {
+                // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+                propA: Number,
+                // 多个可能的类型
+                propB: [String, Number],
+                // 必填的字符串
+                propC: {
+                    type: String,
+                    required: true
+                },
+                // 带有默认值的数字
+                propD: {
+                    type: Number,
+                    default: 100
+                },
+                // 带有默认值的对象
+                propE: {
+                    type: Object,
+                    // 对象或数组默认值必须从一个工厂函数获取
+                    default: function () {
+                        return { message: 'hello' }
+                    }
+                },
+                // 自定义验证函数
+                propF: {
+                    validator: function (value) {
+                        // 这个值必须匹配下列字符串中的一个
+                        return ['success', 'warning', 'danger'].indexOf(value) !== -1
+                    }
+                }
+            },
+            template: `
+                <div> 
+                    my-component<br>
+                    propA: {{propA}}
+                </div>
+            `
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    propA: 'propA',
+                    propC: 'propC',
+                }
+            })
+        </script>
+    </body>
+</html>

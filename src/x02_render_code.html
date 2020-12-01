@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <h1>{{ blogTitle }}</h1>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!',
+                    blogTitle: 'title'
+                },
+                render: function (createElement) {
+                    return createElement('h1', this.blogTitle)
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- v-on 缩写为@ -->
+            <button @click="alertOK">button1</button>
+            <!-- v-bind 缩写为: -->
+            <button :disabled="isButtonDisabled">Button</button>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    'dynamicId': 'div1',
+                    'isButtonDisabled': 'true'
+                },
+                methods:{
+                    'alertOK': function(){
+                        alert('ok');
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

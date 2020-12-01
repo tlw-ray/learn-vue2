@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+        </div>
+        <script>
+            // 全局注册组件
+            Vue.component('button-counter', {
+                // data 必须是个函数, 因此每个对象可以维护一份被返回对象的独立拷贝
+                data: function () {
+                    return {
+                        count: 0
+                    }
+                },
+                template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+            })
+            var app = new Vue({
+                el: '#app',
+            })
+        </script>
+    </body>
+</html>

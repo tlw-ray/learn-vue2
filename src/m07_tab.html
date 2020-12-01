@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- 组件会在 `currentTabComponent` 改变时改变 -->
+            <button
+            v-for="tab in tabs"
+            v-bind:key="tab"
+            v-bind:class="['tab-button', { active: currentTab === tab }]"
+            v-on:click="currentTab = tab"
+          >
+            {{ tab }}
+          </button>
+          <!-- is 属性判定是否显示 -->
+          <component v-bind:is="currentTabComponent" class="tab"></component>
+          
+        </div>
+        <script>
+            Vue.component("tab-home", {
+                template: "<div>Home component</div>"
+            });
+            Vue.component("tab-posts", {
+                template: "<div>Posts component</div>"
+            });
+            Vue.component("tab-archive", {
+                template: "<div>Archive component</div>"
+            });
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    currentTab: "Home",
+                    tabs: ["Home", "Posts", "Archive"]
+                },
+                computed: {
+                    currentTabComponent: function() {
+                        return "tab-" + this.currentTab.toLowerCase();
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div class="static" 
+            v-bind:class="classObject">
+                {{ message }}
+            </div>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!',
+                    isActive: true,
+                    hasError: true
+                },
+                computed: {
+                    classObject: function(){
+                        return {
+                            active: this.isActive,
+                            'text-danger': this.hasError
+                        }
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

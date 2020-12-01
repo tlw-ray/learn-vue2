@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- TODO 具名插槽, 能够看懂但不知道该如何加入 -->
+            <!-- https://cn.vuejs.org/v2/guide/components-slots.html#%E5%85%B7%E5%90%8D%E6%8F%92%E6%A7%BD -->
+            <!-- default slot -->
+            <submit-button></submit-button>
+            <!-- override slot -->
+            <submit-button>Save</submit-button>
+        </div>
+        <script>
+            Vue.component('base-layout', {
+                template: `
+                <div class="container">
+                    <header>
+                        <!-- 我们希望把页头放这里 -->
+                        <slot name="header"></slot>
+                    </header>
+                    <main>
+                        <!-- 我们希望把主要内容放这里 -->
+                        <slot></slot>
+                    </main>
+                    <footer>
+                        <!-- 我们希望把页脚放这里 -->
+                        <slot name="footer"></slot>
+                    </footer>
+                </div>
+                `
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello vue!'
+                }
+            })
+        </script>
+    </body>
+</html>

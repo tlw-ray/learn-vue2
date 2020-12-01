@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <template v-if="ok">
+                <h1>Title</h1>
+                <p>Paragraph 1</p>
+                <p>Paragraph 2</p>
+            </template>
+            <template v-else>
+                <h1>标题</h1>
+                <p>章节 1</p>
+                <p>章节 2</p>
+            </template>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    ok: false
+                }
+            })
+        </script>
+    </body>
+</html>

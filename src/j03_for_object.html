@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <ul id="v-for-object">
+                <li v-for="value in object">
+                  {{ value }}
+                </li>
+            </ul>
+            <br>
+            <div v-for="(value, name, index) in object">
+            {{ index }}. {{ name }}: {{ value }}
+            </div>
+            <br>
+        </div>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    object: {
+                        title: 'How to do lists in Vue',
+                        author: 'Jane Doe',
+                        publishedAt: '2016-04-10'
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

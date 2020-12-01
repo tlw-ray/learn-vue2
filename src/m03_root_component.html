@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <blog-post
+            v-for="post in posts"
+            v-bind:key="post.id"
+            v-bind:post="post"
+          ></blog-post>
+            <button v-on:click="changeTitle">ChangeTitle</button>
+        </div>
+        <script>
+            Vue.component('blog-post', {
+                props: ['post'],
+                template: `
+                    <div class="blog-post">
+                        <h3>{{ post.title }}</h3>
+                        <div v-html="post.content"></div>
+                    </div>
+                `
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    posts: [
+                        { id: 1, title: 'My journey with Vue', content: 'aaa' },
+                        { id: 2, title: 'Blogging with Vue', content: 'bbb' },
+                        { id: 3, title: 'Why Vue is so fun', content: 'ccc' }
+                    ]
+                },
+                methods: {
+                    changeTitle: function () {
+                        this.posts[0].title = 'aaa'
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
