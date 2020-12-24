@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<style>
+			body {
+				  margin: 0;
+				  padding: 0;
+			}
+			
+			#root {
+			  display: flex;
+			  flex-direction: column;
+			  height: 100vh;
+			}
+
+			header {
+			  height: 50px;
+			  flex: 0 0 auto;
+			  background: orange;
+			  margin: 10px 10px 5px 10px;
+			}
+
+			main {
+				display: flex;
+				flex-grow: 1;
+				background-color: blueviolet;
+				margin: 5px 10px 5px 10px;
+			}
+			
+			footer{
+				flex-grow: 0.2;
+				background-color: gray;
+				margin: 5px 10px 10px 10px;
+			}
+			
+			navigator{
+				flex-grow: 0.2;
+				flex-direction: row;
+				background-color: yellow;
+				margin: 10px 5px 10px 10px;
+			}
+			
+			content{
+				flex-grow: 0.8;
+				flex-direction: row;
+				background-color: green;
+				margin: 10px 10px 10px 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<header>
+				head
+			</header>
+			<main>
+				<navigator>
+					Navigator
+				</navigator>
+				<content>
+					Content
+				</content>
+			</main>
+			<footer>
+				foot
+			</footer>
+		</div>
+	</body>
+
+</html>
