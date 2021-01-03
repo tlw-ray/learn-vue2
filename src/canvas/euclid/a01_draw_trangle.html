@@ -1,0 +1,86 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            // draw trangle: AB => [ABC ABD]
+            if(ctx){
+                ctx.beginPath();
+                ctx.strokeStyle = "gray";
+                drawGrid(canvas);
+
+                // draw line segment A, B
+                ctx.beginPath();
+                ctx.strokeStyle = "black";
+                // draw point A (at center)
+                var ax = canvas.width / 2 + .5;
+                var ay = canvas.height / 2 + .5;
+                drawPoint(canvas, "A", ax, ay)
+                // draw Point B
+                var bx = ax + lineSegementLength;
+                var by = ay;
+                drawPoint(canvas, "B", bx, by);
+                // draw Line AB
+                ctx.moveTo(ax, ay);
+                ctx.lineTo(bx, by);
+                ctx.stroke();
+
+                // draw circle A, B
+                ctx.beginPath();
+                ctx.strokeStyle = "green";
+                ctx.arc(ax, ay, lineSegementLength, 0, Math.PI * 2)
+                ctx.arc(bx, by, lineSegementLength, 0, Math.PI * 2)
+                ctx.stroke();
+
+                // circle BA join circle AB at C, D
+                
+                // draw line segment AC, BC
+
+                
+            }
+        }                           
+
+        var lineSegementLength = 50;
+        var pointRadius = 3;
+        var textOffsetX = -10;
+        var textOffsetY = 15;
+
+        function drawPoint(canvas, name, x, y){
+            var ctx = canvas.getContext('2d');
+            ctx.moveTo(x, y)
+            ctx.arc(x, y, pointRadius, 0, Math.PI * 2)
+            ctx.fill();
+            ctx.fillText(name, x + textOffsetX, y + textOffsetY);
+        }
+
+        function drawGrid(ctx){
+            var gridCellWidth = 50;
+            var gridCellHeight = 50;
+            var width = canvas.width;
+            var height = canvas.height;
+            var ctx = canvas.getContext('2d');
+            ctx.setLineDash([8.5, 2.5]);
+            for(var i = 0; i < canvas.width; i += gridCellWidth){
+                ctx.moveTo(i + .5, 0);
+                ctx.lineTo(i + .5, canvas.height);
+            }
+            for(var j = 0; j < canvas.height; j += gridCellHeight){
+                ctx.moveTo(0, j + .5);
+                ctx.lineTo(canvas.width, j + .5);
+            }
+            ctx.stroke();
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>
