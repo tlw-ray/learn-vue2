@@ -1,0 +1,45 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            if(ctx){
+                ctx.fillStyle = "rgb(200, 0, 0)";
+
+                // linecap
+                var lineCap = ['butt','round','square'];
+                // 创建路径
+                ctx.strokeStyle = '#09f';
+                ctx.beginPath();
+                ctx.moveTo(10,10);
+                ctx.lineTo(140,10);
+                ctx.moveTo(10,140);
+                ctx.lineTo(140,140);
+                ctx.stroke();
+
+                // 画线条
+                ctx.strokeStyle = 'black';
+                for (var i=0;i<lineCap.length;i++){
+                    ctx.lineWidth = 15;
+                    ctx.lineCap = lineCap[i];
+                    ctx.beginPath();
+                    ctx.moveTo(25+i*50,10);
+                    ctx.lineTo(25+i*50,140);
+                    ctx.stroke();
+                }
+                
+            }
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>

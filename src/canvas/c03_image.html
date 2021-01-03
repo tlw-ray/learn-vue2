@@ -1,0 +1,40 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            if(ctx){
+                ctx.fillStyle = "rgb(200, 0, 0)";
+                // 创建新 image 对象，用作图案
+                var img = new Image();
+                img.src = 'https://mdn.mozillademos.org/files/222/Canvas_createpattern.png';
+                img.onload = function() {
+                    // 创建图案
+                    var ptrn = ctx.createPattern(img, 'repeat');
+                    ctx.fillStyle = ptrn;
+                    ctx.fillRect(0, 0, 150, 150);
+                }
+
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                ctx.shadowBlur = 2;
+                ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+                ctx.font = "20px Times New Roman";
+                ctx.fillStyle = "Black";
+                ctx.fillText("Sample String", 5, 30);
+                
+            }
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>

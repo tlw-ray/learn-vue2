@@ -1,0 +1,37 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            if(ctx){
+                ctx.fillStyle = "rgb(200, 0, 0)";
+                
+                // line join
+                var lineJoin = ['round', 'bevel', 'miter'];
+                ctx.lineWidth = 10;
+                for (var i = 0; i < lineJoin.length; i++) {
+                    ctx.lineJoin = lineJoin[i];
+                    ctx.beginPath();
+                    ctx.moveTo(-5, 5 + i * 40);
+                    ctx.lineTo(35, 45 + i * 40);
+                    ctx.lineTo(75, 5 + i * 40);
+                    ctx.lineTo(115, 45 + i * 40);
+                    ctx.lineTo(155, 5 + i * 40);
+                    ctx.stroke();
+                }
+                
+            }
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>

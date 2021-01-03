@@ -1,0 +1,32 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            if(ctx){
+                ctx.fillStyle = "rgb(200, 0, 0)";
+                // draw small
+                ctx.beginPath();
+                ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // 绘制
+                // ctx.moveTo(110, 75);
+                ctx.arc(75, 75, 35, 0, Math.PI, false);   // 口(顺时针)
+                // ctx.moveTo(65, 65);
+                ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // 左眼
+                // ctx.moveTo(95, 65);
+                ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // 右眼
+                ctx.stroke();
+            }
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>

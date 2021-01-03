@@ -1,0 +1,27 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            if(ctx){
+                ctx.fillStyle = "rgb(200, 0, 0)";
+                ctx.font = "48px serif";
+                // ctx.textBaseline = "hanging";
+                // ctx.textBaseline = "middle";
+                ctx.strokeText("Hello world", 0, 100);
+                
+            }
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>

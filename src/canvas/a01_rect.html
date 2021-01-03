@@ -1,0 +1,30 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            if(ctx){
+                ctx.fillStyle = "rgba(200, 0, 0)";
+            
+                ctx.fillRect (30, 30, 55, 50);
+                ctx.fillStyle = "rgb(123,128,13)";
+                ctx.fillRect(10, 10, 55, 50);
+
+                // ctx.fillRect(25, 25, 100, 100);
+                // ctx.clearRect(45, 45, 60, 60);
+                // ctx.strokeRect(50, 50, 50, 50);
+            }
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>

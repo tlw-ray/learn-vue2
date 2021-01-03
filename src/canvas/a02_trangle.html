@@ -1,0 +1,43 @@
+<html>
+    <!-- 绘制一个线段和一个圆-->
+    <head>
+        <script>
+        function draw() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext('2d');
+            if(ctx){
+                ctx.fillStyle = "rgb(200, 0, 0)";
+                // draw trangle
+                ctx.beginPath();
+                ctx.moveTo(75, 50);
+                ctx.lineTo(100, 75);
+                ctx.lineTo(100, 25);
+                ctx.fill();
+
+                // 填充三角形
+                ctx.beginPath();
+                ctx.moveTo(25, 25);
+                ctx.lineTo(105, 25);
+                ctx.lineTo(25, 105);
+                ctx.fill();
+
+                // 描边三角形
+                ctx.beginPath();
+                ctx.moveTo(125, 125);
+                ctx.lineTo(125, 45);
+                ctx.lineTo(45, 125);
+                ctx.closePath();
+                ctx.stroke();
+            }
+        }
+        </script>
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onload="draw()">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </body>
+</html>
