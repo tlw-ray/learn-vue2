@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <style> body {margin: 0; }</style>
+        <script src="js/3d-force-graph.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    </head>
+    <body>
+        <div id="3d-graph"></div>
+        <script>
+            const Graph = ForceGraph3D()
+                (document.getElementById('3d-graph'))
+                .jsonUrl('dataset/miserables.json')
+                .nodeLabel('id')
+                .nodeAutoColorBy('group')
+                //返回数值决定了线上动态点的数量
+                .linkDirectionalParticles(d => {
+                    console.log(d.value)
+                    return d.value
+                })
+                // 返回数值是小数决定看起来动态例子运动的速度
+                .linkDirectionalParticleSpeed(d => {
+                    return 0.008
+                });
+        </script>
+    </body>
+</html>

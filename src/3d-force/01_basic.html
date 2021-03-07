@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <style> body {margin: 0; }</style>
+        <script src="js/3d-force-graph.js"></script>
+    </head>
+    <body>
+        <div id="3d-graph"></div>
+        <script>
+            const gData = {
+                nodes: [
+                    {id: 1},
+                    {id: 2},
+                    {id: 3}
+                ],
+                links: [
+                    {source: 1, target: 2},
+                    {source: 2, target: 3},
+                    {source: 3, target: 1},
+                ]
+            };
+            const Graph = ForceGraph3D()
+                (document.getElementById('3d-graph'))
+                .graphData(gData)
+        </script>
+    </body>
+</html>

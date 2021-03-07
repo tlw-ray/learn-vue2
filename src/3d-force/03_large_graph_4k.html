@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <style> body {margin: 0; }</style>
+        <script src="js/3d-force-graph.js"></script>
+    </head>
+    <body>
+        <div id="3d-graph"></div>
+        <script>
+            const elem = document.getElementById('3d-graph')
+            const Graph = ForceGraph3D()
+                (elem)
+                .jsonUrl('dataset/blocks.json')
+                .nodeLabel(node => `${node.user}: ${node.description}`)
+                .nodeAutoColorBy('user')
+                .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
+                .onNodeClick(node => window.open(`/${node.id}`, '_blank'))
+        </script>
+    </body>
+</html>
