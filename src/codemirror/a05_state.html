@@ -1,0 +1,99 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="lib/codemirror.js"></script>
+	<link rel="stylesheet" href="lib/codemirror.css">
+</head>
+
+<body>
+	<textarea id="code">
+hello 23 123 hello 456
+	</textarea>
+</body>
+<script>
+	// define a language:
+	// hello_language: hello_statement+
+	// hello_statement: 'hello' digite
+	// digite: [0-9]+
+	CodeMirror.defineMode("hello", function (editorConfig, parserConfig) {
+
+		var allWords = ["hello"];
+		CodeMirror.registerHelper("hintWords", "hello", allWords);
+
+		var tokenProcessor = {};
+
+		tokenProcessor.start = function(token, stream, state){
+			console.log("start.state.statement: " + state.statement + "->" + token)
+			return null;
+		}
+
+		tokenProcessor.whitespace = function(token, stream, state){
+			console.log("witespace.state.statement: " + state.statement + "->" + token)
+			state.whitespace = true;
+			return null;
+		}
+
+		tokenProcessor.keyword = function(token, stream, state){
+			console.log("keyword.state.statement: " + state.statement  + "->" + token);
+			if((state.statement == "start" || state.statement == "atom") && state.whitespace){
+				state.statement = "keyword";
+				state.whitespace = false;
+				return state.statement;
+			}else{
+				return null;
+			}
+		}
+
+		tokenProcessor.other = function(token, stream, state){
+			console.log("other.state.statement: " + state.statement + "->" + token)
+			if(state.statement == "keyword" && state.whitespace){
+				state.statement = "atom";
+				state.whitespace = false;
+				return state.statement;
+			}else{
+				return null;
+			}
+		}
+
+		tokenProcessor.error = function(token, stream, state){
+			return null;
+		}
+
+		return {
+			startState: function(){
+				console.log("startState ...")
+				return {
+					statement: "start",
+					whitespace: true,
+				}
+			},
+			token: function (stream, state) {
+				var token = null;
+				if(stream.eat(/\s/)){
+					token = "whitespace";
+				}else if(stream.match(/hello/, true, true) && stream.peek() == ' '){
+					token =  "keyword";
+				}else if(stream.match(/[\w\d]+/)){
+					token =  "other";
+				}else{
+					token =  "error";
+				}
+				console.log("token: " + token);
+				var func = tokenProcessor[token];
+				var ss = func(token, stream, state);
+				console.log("111state.statement: " + state.statement);
+				return ss;
+			}
+		}
+	});
+	CodeMirror.defineMIME("text/hello", "hello");
+	console.log(CodeMirror.defaults);
+	CodeMirror.fromTextArea(document.getElementById("code"), {
+		lineNumbers: true,
+		extraKeys: {"Ctrl-Space": "autocomplete"},
+		mode: "text/hello"
+	});
+</script>
+
+</html>

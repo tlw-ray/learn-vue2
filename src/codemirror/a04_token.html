@@ -1,0 +1,50 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="lib/codemirror.js"></script>
+	<link rel="stylesheet" href="lib/codemirror.css">
+</head>
+
+<body>
+	<textarea id="code">
+		hello 123 hello 456
+		hello 789
+	</textarea>
+</body>
+<script>
+	// define a language:
+	// hello_language: hello_statement+
+	// hello_statement: 'hello' digite
+	// digite: [0-9]+
+	CodeMirror.defineMode("hello", function (editorConfig, parserConfig) {
+		return {
+			token: function (stream, state) {
+				if(stream.eatSpace()){
+					console.log("whitespace");
+					return "whitespace";
+				}else if(stream.match(/[0-9]+/, true)){
+					console.log("atom");
+					return "atom";
+				}else if(stream.match("hello", true, true)){
+					console.log("keyword");
+					return "keyword";
+				}else if(stream.match(/.*/)){
+					console.log("other");
+					return "others"
+				}else{
+					console.log("error");
+					return "error";
+				}
+			}
+		}
+	});
+	CodeMirror.defineMIME("text/hello", "hello");
+	console.log(CodeMirror.defaults);
+	CodeMirror.fromTextArea(document.getElementById("code"), {
+		lineNumbers: true,
+		mode: "text/hello"
+	});
+</script>
+
+</html>

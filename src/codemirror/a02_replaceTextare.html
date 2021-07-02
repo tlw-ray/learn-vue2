@@ -1,0 +1,18 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="lib/codemirror.js"></script>
+	<link rel="stylesheet" href="lib/codemirror.css">
+	<script src="mode/javascript/javascript.js"></script>
+</head>
+<body>
+	<textarea id="myTextArea">
+		function myScript(){return 100;}
+	</textarea>
+</body>
+<script>
+var myCodeMirror = CodeMirror(function(elt) {
+  myTextArea.parentNode.replaceChild(elt, myTextArea);
+}, {value: myTextArea.value, mode: "javascript"});
+</script>
+</html>
