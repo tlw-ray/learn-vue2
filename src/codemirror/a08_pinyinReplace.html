@@ -1,0 +1,132 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="lib/codemirror.js"></script>
+	<link rel="stylesheet" href="lib/codemirror.css">
+	<!--括号匹配-->
+	<script src="addon/edit/matchbrackets.js"></script>
+    <!--自动补全-->
+    <link rel="stylesheet" href="addon/hint/show-hint.css">
+    <script src="addon/hint/show-hint.js"></script>
+</head>
+
+<body>
+	<textarea id="code">
+hello 23 123 hello 456
+	</textarea>
+</body>
+<script>
+	// 暂停于此, CodeMirror的hint界面太粗糙
+	// define a language:
+	// hello_language: hello_statement+
+	// hello_statement: 'hello' digite
+	// digite: [0-9]+
+	// 拼音首拼+渲染中文
+	CodeMirror.defineMode("hello", function (editorConfig, parserConfig) {
+
+		CodeMirror.registerHelper("hintWords", "hello", allWords);
+
+		var tokenProcessor = {};
+
+		tokenProcessor.start = function(token, stream, state){
+			return null;
+		}
+
+		tokenProcessor.whitespace = function(token, stream, state){
+			return null;
+		}
+
+		tokenProcessor.keyword = function(token, stream, state){
+			if(state.statement == "start" || state.statement == "atom"){
+				state.statement = "keyword";
+				return state.statement;
+			}else{
+				return null;
+			}
+		}
+
+		tokenProcessor.other = function(token, stream, state){
+			if(state.statement == "keyword"){
+				state.statement = "atom";
+				return state.statement;
+			}else{
+				return null;
+			}
+		}
+
+		tokenProcessor.error = function(token, stream, state){
+			return "error";
+		}
+
+		return {
+			startState: function(){
+				return {
+					statement: "start"
+				}
+			},
+			token: function (stream, state) {
+				var token = null;
+				if(stream.eat(/\s/)){
+					token = "whitespace";
+				}else if(stream.match(/hello|bye|中文|aaa|bbb|ccc|ddd|eee|fff|ggg|hhh|iii|jjj|kkk/, true, true)){
+					token =  "keyword";
+				}else if(stream.match(/\S+/)){
+					token =  "other";
+				}else if(stream.match(/error/, true, true)){
+					token =  "error";
+				}else{
+					return null;
+				}
+				var func = tokenProcessor[token];
+				var ss = func(token, stream, state);
+				return ss;
+			}
+		}
+	});
+	
+	var allWords = ["hello", "bye", "中文", "bbb", "ccc", "ddd", "eee", "fff", "ggg", "hhh", "iii", "jjj", "kkk"];
+
+	function createHint(){
+		return new Promise(function(accept) {
+			setTimeout(function() {
+				var cursor = editor.getCursor(), line = editor.getLine(cursor.line)
+				var start = cursor.ch, end = cursor.ch
+				while (start && /\w/.test(line.charAt(start - 1))) --start
+				while (end < line.length && /\w/.test(line.charAt(end))) ++end
+				var word = line.slice(start, end).toLowerCase()
+				console.log("cursor.line: " + cursor.line);
+				for (var i = 0; i < allWords.length; i++){
+					if (allWords[i].indexOf(word) != -1){
+						return accept({list: allWords,
+							from: CodeMirror.Pos(cursor.line, start),
+							to: CodeMirror.Pos(cursor.line, end)})
+					}
+				}
+				return accept(null)
+			}, 100)
+		});
+	}
+	CodeMirror.registerHelper("hint", "hello", function(editor, options){
+		console.log("hint...");
+		return createHint();
+	})
+	CodeMirror.defineMIME("text/hello", "hello");
+	console.log(CodeMirror.defaults);
+	var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+		lineNumbers: true,
+		mode: "text/hello",
+		extraKeys: {"Alt-/": "autocomplete"},
+	});
+
+	editor.on("change", function(editor, change){
+		// 任意按钮触发autocomplete
+		if(change.origin == "+input"){
+			console.log("change: " + JSON.stringify(change));
+			console.log("text: " + editor.document);
+			setTimeout(function () { editor.execCommand("autocomplete"); }, 20);
+		}
+	})
+</script>
+
+</html>
