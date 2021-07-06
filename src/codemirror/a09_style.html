@@ -1,0 +1,196 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="lib/codemirror.js"></script>
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <link rel="stylesheet" href="theme/darcula.css">
+    <link rel="stylesheet" href="theme/eclipse.css">
+    <link rel="stylesheet" href="theme/idea.css">
+    <link rel="stylesheet" href="theme/panda-syntax.css">
+    <link rel="stylesheet" href="theme/rubyblue.css">
+    <link rel="stylesheet" href="theme/the-matrix.css">
+    <link rel="stylesheet" href="theme/xq-dark.css">
+    <link rel="stylesheet" href="theme/xq-light.css">
+	<!--括号匹配-->
+    <script src="addon/edit/matchbrackets.js"></script>
+    <!--亮显选中行-->
+    <script src="addon/selection/active-line.js"></script>
+    <!--自动补全-->
+    <link rel="stylesheet" href="addon/hint/show-hint.css">
+    <script src="addon/hint/show-hint.js"></script>
+</head>
+
+<body>
+	<textarea id="code">
+hello 23 123 hello 456
+	</textarea>
+</body>
+<script>
+	// define a language:
+	// hello_language: hello_statement+
+	// hello_statement: 'hello' digite
+	// digite: [0-9]+
+	// 拼音首拼+渲染中文
+	CodeMirror.defineMode("hello", function (editorConfig, parserConfig) {
+
+		var tokenProcessor = {};
+
+		tokenProcessor.start = function(token, stream, state){
+			return null;
+		}
+
+		tokenProcessor.whitespace = function(token, stream, state){
+			return null;
+		}
+
+		tokenProcessor.keyword = function(token, stream, state){
+			if(state.statement == "start" || state.statement == "atom"){
+				state.statement = "keyword";
+				return state.statement;
+			}else{
+				return null;
+			}
+		}
+
+		tokenProcessor.other = function(token, stream, state){
+			if(state.statement == "keyword"){
+				state.statement = "atom";
+				return state.statement;
+			}else{
+				return null;
+			}
+		}
+
+		tokenProcessor.error = function(token, stream, state){
+			return "error";
+		}
+
+		return {
+			startState: function(){
+				return {
+					statement: "start"
+				}
+			},
+			token: function (stream, state) {
+				var token = null;
+				if(stream.eat(/\s/)){
+					token = "whitespace";
+				}else if(stream.match(/hello|bye|中文|啊啊啊|不不不|错错错|大段的|呃呃呃|烦烦烦|广告歌|哈哈哈|iii|聚聚聚|酷酷酷/, true, true)){
+					token =  "keyword";
+				}else if(stream.match(/\S+/)){
+					token =  "other";
+				}else if(stream.match(/error/, true, true)){
+					token =  "error";
+				}else{
+					return null;
+				}
+				var func = tokenProcessor[token];
+				var ss = func(token, stream, state);
+				return ss;
+			}
+		}
+	});
+	
+	// 转换选中的allWords
+	var allWords2 = [
+		{
+			// 被替换的内容
+			text: "中文abc",
+			// 现实在推荐提示的内容
+			displayText: "中文abc",
+			// 用来匹配输入的码
+			code: "zwabc"
+		},{
+			text: "中国",
+			displayText: "中国",
+			code: "zg"
+		},{
+			text: "英文",
+			displayText: "英文",
+			code: "yw"
+        },{
+			text: "啊啊啊",
+			displayText: "aaa: 啊啊啊",
+			code: "aaa"
+		},{
+			text: "啊啊啊",
+			displayText: "啊啊啊",
+			code: "啊啊啊"
+		},{
+			text: "不不不",
+			displayText: "bbb: 不不不",
+			code: "bbb"
+		},{
+			text: "不不不",
+			displayText: "不不不",
+			code: "不不不"
+		},{
+			text: "存储层",
+			displayText: "存储层",
+			code: "ccc"
+		},{
+			text: "大段的",
+			displayText: "ddd",
+			code: "ddd"
+		}
+	]
+
+	function createHint(){
+		return new Promise(function(accept) {
+			setTimeout(function() {
+				var cursor = editor.getCursor(), line = editor.getLine(cursor.line)
+				var start = cursor.ch, end = cursor.ch
+				while (start && /\w/.test(line.charAt(start - 1))) --start
+				while (end < line.length && /\w/.test(line.charAt(end))) ++end
+				var word = line.slice(start, end).toLowerCase()
+				console.log("word: " + word);
+				console.log("cursor.line: " + cursor.line);
+				console.log("allWords2.length: " + allWords2.length);
+				// 过滤可用的自动补全推荐
+				var completeWords = [];
+				for (var i = 0; i < allWords2.length; i++){
+					if (allWords2[i].code.indexOf(word) != -1){
+						completeWords.push(allWords2[i]);
+					}
+				}
+				// 构成自动补全替换结构
+				if(completeWords.length > 0){
+					return accept({list: completeWords,
+							from: CodeMirror.Pos(cursor.line, start),
+							to: CodeMirror.Pos(cursor.line, end)})
+				}else{
+					return accept(null);
+				}
+			}, 100)
+		});
+	}
+	CodeMirror.registerHelper("hint", "hello", function(editor, options){
+		// 如果仅有一个自动补全适应也需要由用户确认, 以便用户能够输入一些非法内容 -_-!
+        options.completeSingle = false;
+        options.closeOnUnfocus = false;
+		return createHint();
+	})
+	CodeMirror.defineMIME("text/hello", "hello");
+	console.log(CodeMirror.defaults);
+	var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+		mode: "text/hello",
+        extraKeys: {"Alt-/": "autocomplete"},
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true
+    });
+    // darcula|eclipse|idea|panda-syntax|rubyblue|the-matrix|xq-dark|xq-light
+    editor.setOption("theme", "darcula");
+	editor.on("change", function(editor, change){
+		// 任意按钮触发autocomplete
+		// TODO 点或者下划线触发提示
+		if(change.origin == "+input"){
+			console.log("change: " + JSON.stringify(change));
+			setTimeout(function () { editor.execCommand("autocomplete"); }, 20);
+		}
+    })
+    //TODO closeTag|folding|indentwrap|lint|Match Highlighter|TagMatcher|Panel|Placeholder|Search|Tern|TrailingErrorStyle|Visible tabs|Widget|
+</script>
+
+</html>
