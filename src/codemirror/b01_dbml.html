@@ -1,0 +1,294 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="lib/codemirror.js"></script>
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <link rel="stylesheet" href="theme/darkvs.css">
+	<!--括号匹配-->
+    <script src="addon/edit/matchbrackets.js"></script>
+    <!--亮显选中行-->
+	<script src="addon/selection/active-line.js"></script>
+	<!--注释-->
+    <!-- <script src="addon/comment/comment.js"></script> -->
+    <!--自动补全-->
+    <link rel="stylesheet" href="addon/hint/show-hint.css">
+	<script src="addon/hint/show-hint.js"></script>
+	<script src="util.js"></script>
+</head>
+
+<body>
+<textarea id="code">TABLE ID123{
+	11ID NUMERIC(19, 0) [PK]
+	NAME VARCHAR(5000)
+	ID_ID_ID NUMERIC(19, 0) [REF: > ID.ID]
+}</textarea>
+	<pre>
+		table T1 {
+			ID NUMERICE(19, 0) pk
+			NAME VARCHAR(5000)
+		}
+		
+	</pre>
+</body>
+<script>
+	// 词根按长度倒排, 生成词根、实体关键字、类型关键字的正则表达式
+	var namewords = [
+		'CONFIDENTIALITY', 'IDENTIFICATION', 'RECONCILIATION', 'CORRESPONDING', 'PSYCHOTROPICS', 'DISCONTINUED', 'MANUFACTURER', 'ORGANIZATION', 'PHARMACOLOGY', 'PRESCRIPTION',
+		'PROFESSIONAL', 'APPOINTMENT', 'CALCULATION', 'CERTIFICATE', 'CORRELATION', 'CRITICALITY', 'DEACTIVATED', 'DESCRIPTION', 'EXAMINATION', 'NATIONALITY',
+		'PAEDIATRICS', 'PREPARATION', 'PRESCRIBING', 'REGISTERING', 'TRANSACTION', 'ADDITIONAL', 'ALLOCATION', 'ANTIBACTRL', 'APPOINTING', 'ASSESSMENT',
+		'BIOLOGICAL', 'COLLECTION', 'ELECTRONIC', 'EMPLOYMENT', 'EVALUATION', 'EXPERIENCE', 'INFECTIOUS', 'INSPECTION', 'INVALIDATE', 'MEDICATION',
+		'OCCUPATION', 'OUTPATIENT', 'PRESCRIBED', 'PROCESSING', 'PRODUCTION', 'PROHIBITED', 'REFUNDABLE', 'REGISTERED', 'RETURNABLE', 'SETTLEMENT',
+		'ACTIVATED', 'ALLOCATED', 'APPOINTED', 'AVAILABLE', 'CANCELING', 'COMMODITY', 'COMPLETED', 'CONCERNED', 'CONTAINER', 'DECOCTION',
+		'DIAGNOSED', 'DIAGNOSIS', 'DIRECTION', 'EDUCATION', 'ENCOUNTER', 'EXPERTISE', 'FULFILLED', 'GENERATED', 'GESTATION', 'INSURANCE',
+		'INTENTION', 'INTERFACE', 'LACTATION', 'OPERATION', 'PRINCIPAL', 'PROCESSED', 'RECEPTION', 'REDIATION', 'REIMBURSE', 'SCHEDULED',
+		'SIGNATURE', 'STATEMENT', 'SUBMITTED', 'SUBSTANCE', 'TELEPHONE', 'TREATMENT', 'WITHDRAWN', 'ADJUVANT', 'ALLERGEN', 'ARCHIVED',
+		'BEDSIDED', 'BUSINESS', 'CANCELED', 'CARDINAL', 'CATEGORY', 'CHARGING', 'CHEMICAL', 'CLINICAL', 'COMPOUND', 'CONTRAST',
+		'CRITICAL', 'DISCOUNT', 'DOCUMENT', 'EMPLOYEE', 'EXTERNAL', 'FINDINGS', 'GENERATE', 'HOSPITAL', 'IDENTITY', 'INFUSION',
+		'INTERNAL', 'LOCATION', 'MANUFACT', 'MEDICINE', 'MODIFIED', 'OCCURRED', 'OPERATED', 'OPERATOR', 'ORIGINAL', 'OUTGOING',
+		'PERSONAL', 'PHARMACY', 'PORTRAIT', 'POSITION', 'PROVIDED', 'PROVINCE', 'PURCHASE', 'QUANTITY', 'REGISTER', 'RELIGION',
+		'RESOURCE', 'REVIEWED', 'REVIEWER', 'ROUNDING', 'SCHEDULE', 'SECURITY', 'SHORTCUT', 'SPECIMEN', 'STANDARD', 'STRATEGY',
+		'STRENGTH', 'TEMPLATE', 'VARIABLE', 'WITHDRAW', 'ACCOUNT', 'ADDRESS', 'ALLERGY', 'ALLOWED', 'ARCHIVE', 'ATHLETE',
+		'BALANCE', 'BILLING', 'CHANNEL', 'CHARGED', 'CHINESE', 'COMPANY', 'CONCEPT', 'CONTACT', 'CONTENT', 'COUNTRY',
+		'CREATED', 'CURRENT', 'DEFAULT', 'DEPOSIT', 'DISEASE', 'DISPLAY', 'ENABLED', 'ENGLISH', 'EXPIRED', 'EXPRESS',
+		'EXTRACT', 'HISTORY', 'INVOICE', 'LABTEST', 'LINKAGE', 'MARITAL', 'MEDICAL', 'MEDTECH', 'NONCASH', 'PARTIAL',
+		'PATIENT', 'PAYMENT', 'PICTURE', 'POVERTY', 'PRICING', 'PRIMARY', 'PRINTED', 'PRUDENT', 'PURPOSE', 'REBUILD',
+		'RECEIPT', 'RELATED', 'RELEASE', 'REQIRED', 'RESYCLE', 'SECTION', 'SEGMENT', 'SERVICE', 'SETTING', 'SETTLED',
+		'SOLVENT', 'SPECIAL', 'STORAGE', 'SUBJECT', 'SUMMARY', 'SURGERY', 'SYMPTOM', 'TELECOM', 'VARIETY', 'VERSION',
+		'VILLAGE', 'VISITED', 'ACTION', 'ADVICE', 'AGENTS', 'AMOUNT', 'ANONYM', 'BACKUP', 'BEFORE', 'CANCEL',
+		'CENTER', 'CHANGE', 'CHARGE', 'CLINIC', 'CLOSED', 'COUNTY', 'CREATE', 'CREDIT', 'CUSTOM', 'DECOCT',
+		'DEGREE', 'DETAIL', 'DOCTOR', 'DOSAGE', 'ENABLE', 'FACTOR', 'FAMILY', 'GENDER', 'HERBAL', 'IDCARD',
+		'ISSUED', 'LATEST', 'MERGER', 'METHOD', 'MOBILE', 'MODIFY', 'NATION', 'NATIVE', 'NEEDED', 'NOTICE',
+		'NUMBER', 'OUTPAT', 'PARENT', 'PAYING', 'PERIOD', 'PERSON', 'PINYIN', 'POSTAL', 'PREFIX', 'REASON',
+		'RECIPE', 'RECORD', 'REFUND', 'REPORT', 'RESULT', 'RETAIL', 'RETURN', 'REVIEW', 'SECRET', 'SELECT',
+		'SERIAL', 'SERVED', 'SETTLE', 'SINGLE', 'SOURCE', 'STATUS', 'SUBMIT', 'SUFFIX', 'SYSTEM', 'TRIAGE',
+		'URGENT', 'ADMIN', 'AFTER', 'AGENT', 'ALLOC', 'BASIC', 'BEGIN', 'BIRTH', 'CATEG', 'CAUSE',
+		'CHECK', 'CHILD', 'CLASS', 'COUNT', 'CYCLE', 'FIRST', 'GIVEN', 'GRADE', 'HOUSE', 'IMAGE',
+		'INDEX', 'INSTI', 'INSUR', 'INTRO', 'ISSUE', 'LEVEL', 'LIMIT', 'MAJOR', 'MEDIA', 'MINOR',
+		'MONTH', 'MULTI', 'NOTES', 'ONSET', 'ORDER', 'OWNER', 'PLACE', 'PRESC', 'PRICE', 'PRINT',
+		'PURCH', 'QUEUE', 'RCMDD', 'ROUTE', 'SCHED', 'SCOPE', 'SHIFT', 'SPECI', 'SPLIT', 'START',
+		'STATE', 'TITLE', 'TOTAL', 'TRACE', 'TRANS', 'TRIAL', 'USAGE', 'USING', 'VALID', 'VALUE',
+		'VISIT', 'ADDR', 'AUTH', 'BILL', 'BODY', 'CADN', 'CALC', 'CALL', 'CARD', 'CARE',
+		'CASH', 'CATE', 'CERT', 'CHRG', 'CITY', 'CODE', 'CONV', 'COST', 'CTRL', 'DATE',
+		'DAYS', 'DEPT', 'DESC', 'DIST', 'DOCT', 'DOSE', 'DRIP', 'DRUG', 'EXAM', 'EXEC',
+		'FILL', 'FLAG', 'FORM', 'FREQ', 'FULL', 'HASH', 'HEAD', 'HERB', 'HIGH', 'HOST',
+		'IMRN', 'INFO', 'INIT', 'ITEM', 'JSON', 'LINK', 'LIST', 'MEMO', 'NAME', 'NEDL',
+		'NOON', 'OMRN', 'OUTP', 'PACK', 'PAID', 'PART', 'POOL', 'PROV', 'RATE', 'REAL',
+		'REIM', 'RISK', 'ROLE', 'RULE', 'SELF', 'SIDE', 'SITE', 'SLOW', 'SOID', 'SPEC',
+		'SUBJ', 'TEAM', 'TEST', 'TEXT', 'TIME', 'TOWN', 'TYPE', 'UNIT', 'USER', 'WARD',
+		'WEEK', 'WORK', 'WUBI', '2ND', 'AGE', 'AMT', 'APP', 'AST', 'BED', 'BIZ',
+		'CLI', 'DAY', 'DEL', 'DOC', 'DST', 'DUE', 'EMP', 'EMR', 'ENC', 'END',
+		'ESS', 'EXP', 'EXT', 'FDA', 'FIX', 'ID2', 'IMG', 'LIS', 'LOG', 'MAX',
+		'MED', 'MID', 'MIN', 'MRT', 'NEW', 'NON', 'ORD', 'ORG', 'POS', 'PRE',
+		'PRI', 'QTY', 'REF', 'REG', 'REQ', 'RES', 'RET', 'RIS', 'RPT', 'SEC',
+		'SEQ', 'SET', 'STD', 'SVC', 'TCM', 'TXN', 'URL', 'USE', 'WIN', 'AT',
+		'BY', 'CA', 'CD', 'CS', 'ES', 'ID', 'IN', 'IP', 'IS', 'NO',
+		'OF', 'QR', 'X', 'Y', 'Z',
+	];
+
+	// 按字母排序用于人类阅读
+    let namewordsHumen = namewords.sort(function(s, t) {  
+        let a = s.toLowerCase();  
+        let b = t.toLowerCase();  
+        if (a < b) return -1;  
+        if (a > b) return 1;  
+        return 0;  
+    })  
+	
+	var namewordRegexExpression = toRegexString(namewords);
+	var namewordRegex = new RegExp(namewordRegexExpression, "i");
+	var namewordAttemptRegex = new RegExp("(" + namewordRegexExpression + ")[\\s_\\.\\]\\)\\{\\}]+", "i");
+
+	var typewords = ['NUMERIC', 'TIMESTAMP', 'VARCHAR', 'SMALLINT'];
+	var typewordRegexExpression = toRegexString(typewords);
+	var typewordRegex = new RegExp(typewordRegexExpression, "i");
+	var typewordAttemptRegex = new RegExp("(" + typewordRegexExpression + ")\\W+", "i");
+
+	var entitywords = ['TABLE', 'ENUM', 'REF', 'INDEX', 'PK'];
+	var entitywordRegexExpression = toRegexString(entitywords);
+	var entitywordRegex = new RegExp(entitywordRegexExpression, "i");
+	var entitywordAttemptRegex = new RegExp("(" + entitywordRegexExpression + ")\\W+", "i");
+
+	var degitalRegexExpression = new RegExp("[0-9]+");
+	var degitalAttemptRegexExpression = new RegExp("[0-9]+[\\),]+");
+
+	// 定义DBML语言
+	CodeMirror.defineMode("dbml", function (editorConfig, parserConfig) {
+
+		var tokenProcessor = {};
+
+		return {
+			startState: function(){
+				return {
+					statement: "start",
+					curlyBraces: 0,
+					squareBraces: 0,
+					braces: 0,
+					start: 0,
+					end: 0
+				}
+			},
+			token: function (stream, state) {
+				state.string = stream.string;
+				state.style = null;
+				state.line = stream.lineOracle.line;
+				state.start = stream.start;
+				state.pos = stream.pos;
+				state.match = null;
+
+				if(stream.eat('_')){
+					state.token = "underscroll";
+					state.style = "split";
+				}else if(stream.eatSpace()){
+					state.token = "whitespace";
+				}else if(stream.eat('{')){
+					state.token = "beginCurlyBraces";
+					state.statement = 'column';
+				}else if(stream.eat('}')){
+					state.token = "endCurlyBraces";
+				}else if(stream.eat('[')){
+					state.token = "beginSquareBraces";
+				}else if(stream.eat(']')){
+					state.token = "endSquareBraces";
+				}else if(stream.eat('(')){
+					state.token = "beginBraces";
+				}else if(stream.eat(')')){
+					state.token = "endBraces";
+				}else if(stream.eat(',')){
+					state.token = "comma";
+				}else if(stream.eat('.')){
+					state.token = "dot";
+					state.style = "split";
+				}else if(stream.eat(':')){
+					state.token = "colon";
+				}else if(stream.eat('>')){
+					state.token = "gt";
+				}else if(stream.eat('<')){
+					state.token = "lt";
+				}else if(stream.match(entitywordAttemptRegex, false, true)){
+					state.match = stream.match(entitywordRegex, true, true);
+					state.token =  "entityword";
+					state.style = "entityword";
+					state.statement = state.match[0];
+				}else if(stream.match(typewordAttemptRegex, false, true)){
+					state.match = stream.match(typewordRegex, true, true);
+					state.token = "typeword";
+					state.style = "typeword";
+					state.statement = state.match[0];
+				}else if(stream.match(namewordAttemptRegex, false, true)){
+					state.match = stream.match(namewordRegex, true, true);
+					state.token = "nameword";
+					state.style = "variablebold";
+					if(state.statement.toLowerCase() == 'table'){
+						state.style = "tableword";
+					}else{
+						state.style = "columnword";
+					}
+				}else if(state.match = stream.match(degitalAttemptRegexExpression, false)){
+					stream.match(degitalRegexExpression, true);
+					state.token = "number";
+					state.style = "numeric";
+				}else if(state.match = stream.match(/[^\{\(\[\}\]\)\s]+/)){
+					state.token =  "other";
+				}else{
+					console.error("Unsupport token line: " + stream.string)
+					return null;
+				}
+				// console.log("token.state: " + JSON.stringify(state));
+				return state.style;
+			}
+		}
+	});
+
+	// table关键字提示
+	var tableCompletes = [
+		{
+			text: "table ",
+			displayText: "table关键字",
+			code: "table"
+		}
+	]
+
+	// 实体提示
+	var columnEntityCompletes = toCompleteWords(['PK', 'REF']);
+
+	function createHint(){
+		return new Promise(function(accept) {
+			setTimeout(function() {
+				// 如果是列名则提供列名提示
+				var cursor = editor.getCursor();
+				var end = cursor.ch;
+				var line = editor.getLine(cursor.line);
+				var line = line.slice(0, end);
+				var word = null;
+				var nameAttempt = null;
+
+				var lastSpacePos = line.lastIndexOf(' ');
+				var lastTabPos = line.lastIndexOf('\t');
+				var lastUnderscrollPos = line.lastIndexOf('_');
+				var lastDotPos = line.lastIndexOf('.');
+				var start = Math.max(lastSpacePos, lastTabPos, lastUnderscrollPos, lastDotPos) + 1;
+				word = line.slice(start, end);
+				// console.log("start: " + start + " end: " + end + " word: " + word + " line: " + line);
+
+				// 根据语法状态选择可能的提示词
+				allWords = wordCompletes;
+
+				// 过滤可用的自动补全推荐 TODO 距离计算
+				var wordLowerCase = word.toLowerCase();
+				var completeWords = [];
+				for (var i = 0; i < allWords.length; i++){
+					if(allWords[i].code == wordLowerCase){
+						completeWords.unshift(allWords[i]);
+					}else if (allWords[i].code.indexOf(wordLowerCase) != -1){
+						completeWords.push(allWords[i]);
+					}
+				}
+				// 构成自动补全替换结构
+				if(completeWords.length > 0){
+					return accept({list: completeWords,
+							from: CodeMirror.Pos(cursor.line, start),
+							to: CodeMirror.Pos(cursor.line, end)})
+				}else{
+					return accept(null);
+				}
+			}, 100)
+		});
+	}
+	CodeMirror.registerHelper("hint", "dbml", function(editor, options){
+		// 如果仅有一个自动补全适应也需要由用户确认, 以便用户能够输入一些非法内容 -_-!
+		options.completeSingle = false;
+		// 失去焦点时不隐藏提示窗口
+        options.closeOnUnfocus = false;
+		return createHint();
+	})
+	CodeMirror.defineMIME("text/dbml", "dbml");
+	// console.log(CodeMirror.defaults);
+	var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+		mode: "text/dbml",
+        extraKeys: {"Alt-/": "autocomplete"},
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true
+    });
+    editor.setOption("theme", "darkvs");
+	editor.on("change", function(editor, change){
+		// 任意按钮触发autocomplete
+		if(change.origin == "+input"){
+			// console.log("change: " + JSON.stringify(change));
+			setTimeout(function () { editor.execCommand("autocomplete"); }, 100);
+		}
+	})
+	//TODO REF引用的必然是主键
+	//TODO 提示匹配部分加亮
+	//TODO 提示部分添加图标
+	//TODO tableSnippets
+	//TODO 覆盖Ctrl+S快捷键实现保存
+	//TODO 添加中文首拼索引
+	//TODO 添加表数据折叠
+	//TODO 如果是table段则提供tableSnippets
+	//TODO 如果是表名或列名或者外键引用则提供名字提示
+    //TODO closeTag|folding|indentwrap|lint|Match Highlighter|TagMatcher|Panel|Placeholder|Search|Tern|TrailingErrorStyle|Visible tabs|Widget|
+</script>
+
+</html>

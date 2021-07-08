@@ -1,0 +1,79 @@
+/**
+    Name: IntelliJ IDEA darkvs theme
+    From IntelliJ IDEA by JetBrains
+ */
+
+.cm-s-darkvs  { font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace, serif;}
+.cm-s-darkvs.CodeMirror { background: #1E1E1E; color: #D4D4D4; }
+
+.cm-s-darkvs span.cm-meta { color: #BBB529; }
+.cm-s-darkvs span.cm-def { color: #A9B7C6; font-style: italic; }
+.cm-s-darkvs span.cm-variable-2 { color: #A9B7C6; }
+.cm-s-darkvs span.cm-variable-3 { color: #9876AA; }
+.cm-s-darkvs span.cm-type { color: #AABBCC; font-weight: bold; }
+.cm-s-darkvs span.cm-property { color: #FFC66D; }
+.cm-s-darkvs span.cm-operator { color: #A9B7C6; }
+.cm-s-darkvs span.cm-string { color: #6A8759; }
+.cm-s-darkvs span.cm-string-2 { color: #6A8759; }
+.cm-s-darkvs span.cm-comment { color: #6A9955; font-style: italic; }
+.cm-s-darkvs span.cm-link { color: #CC7832; }
+.cm-s-darkvs span.cm-atom { color: #CC7832; }
+.cm-s-darkvs span.cm-error { color: #BC3F3C; }
+.cm-s-darkvs span.cm-tag { color: #629755; font-weight: bold; font-style: italic; text-decoration: underline; }
+.cm-s-darkvs span.cm-attribute { color: #9cdcfe; }
+.cm-s-darkvs span.cm-qualifier { color: #6A8759; }
+.cm-s-darkvs span.cm-builtin { color: #FF9E59; }
+.cm-s-darkvs span.cm-special { color: #FF9E59; }
+.cm-s-darkvs span.cm-matchhighlight { color: #FFFFFF; background-color: rgba(50, 89, 48, .7); font-weight: normal;}
+.cm-s-darkvs span.cm-searching { color: #FFFFFF; background-color: rgba(61, 115, 59, .7); font-weight: normal;}
+
+.cm-s-darkvs .CodeMirror-cursor { border-left: 1px solid #A9B7C6; }
+.cm-s-darkvs .CodeMirror-activeline-background { background: #323232; }
+.cm-s-darkvs .CodeMirror-gutters { background: #313335; border-right: 1px solid #313335; }
+.cm-s-darkvs .CodeMirror-guttermarker { color: #FFEE80; }
+.cm-s-darkvs .CodeMirror-guttermarker-subtle { color: #D0D0D0; }
+.cm-s-darkvs .CodeMirrir-linenumber { color: #606366; }
+.cm-s-darkvs .CodeMirror-matchingbracket { background-color: #3B514D; color: #FFEF28 !important; font-weight: bold; }
+
+.cm-s-darkvs div.CodeMirror-selected { background: #214283; }
+
+.CodeMirror-hints.darkvs {
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  color: #9C9E9E !important;
+  background-color: #3B3E3F !important;
+}
+
+.CodeMirror-hints.darkvs .CodeMirror-hint-active {
+  background-color: #494D4E !important;
+  color: white !important;
+}
+
+/*TLW: 提示框内文字颜色黑色改为白色易于查阅*/
+.CodeMirror-hint {
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  color: lightgray !important;
+  background-color: #3B3E3F !important;
+}
+/*TLW: 根据vscode dark_vs风格添加*/
+.cm-s-darkvs span.cm-header { color: #000080; }
+.cm-s-darkvs span.cm-regexp { color: #646695; }
+.cm-s-darkvs span.cm-css { color: #d7ba7d; }
+.cm-s-darkvs span.cm-deleted { color: #ce9178; }
+.cm-s-darkvs span.cm-markdownList { color: #6796e6; }
+.cm-s-darkvs span.cm-tag1 { color: #808080; }
+.cm-s-darkvs span.cm-raw { color: #ce9178; }
+.cm-s-darkvs span.cm-python { color: #9cdcfe; }
+.cm-s-darkvs span.cm-regexp2 { color: #d16969; }
+.cm-s-darkvs span.cm-expression { color: #d4d4d4; }
+/*TLW: DBML显式使用的样式*/
+.cm-s-darkvs span.cm-number { color: #6897BB; }
+.cm-s-darkvs span.cm-entityword { color: #66AAFF; font-weight: bold;}
+.cm-s-darkvs span.cm-typeword { color: #3dc9b0; font-size: small;}
+.cm-s-darkvs span.cm-tableword { color: #00AA00; font-weight: bold;}
+.cm-s-darkvs span.cm-columnword { color: #00AA00; }
+.cm-s-darkvs span.cm-variable { color: #A9B7C6; }
+.cm-s-darkvs span.cm-variablebold { color: #A9B7C6; font-weight: bold;}
+.cm-s-darkvs span.cm-numeric { color: #b5cea8;font-size: small;}
+.cm-s-darkvs span.cm-split { color: #AAAA00; }
+.cm-s-darkvs span.cm-bracket { color: #A9B7C6; }
+.cm-s-darkvs span.cm-invalid { color: #f44747; }
